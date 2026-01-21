@@ -21,13 +21,15 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle, DrawingCanvasProps>(({ too
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // 让画布的像素尺寸与在页面上的实际尺寸一致，避免只在上半部分能画的问题
+    // 使用设备像素比，确保画布内部坐标系与视觉尺寸一致（避免只能在上半部分绘制的问题）
     const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width;
-    canvas.height = rect.height;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
 
     const context = canvas.getContext('2d', { willReadFrequently: true });
     if (context) {
+      context.scale(dpr, dpr);
       context.lineCap = 'round';
       context.lineJoin = 'round';
       context.strokeStyle = 'black';

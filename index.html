@@ -29,12 +29,11 @@
     <style type="text/tailwindcss">
         body {
             font-family: 'Spline Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            @apply bg-poke-white text-poke-black select-none flex justify-center;
+            @apply bg-poke-white text-poke-black select-none;
         }
         #root {
             width: 100vw;
-            height: 100vh;
-            max-width: 480px; /* 约等于常见移动端 16:9 视口宽度 */
+            min-height: 100vh;
         }
         .pokeball-bg {
             background: linear-gradient(to bottom, #FF0000 50%, #FFFFFF 50%);

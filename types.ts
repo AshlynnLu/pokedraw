@@ -1,6 +1,5 @@
 
 export type GameState = 'HOME' | 'DRAWING' | 'RESULT';
-export type GameMode = 'NORMAL' | 'TIMED';
 
 export interface Pokemon {
   id: number;

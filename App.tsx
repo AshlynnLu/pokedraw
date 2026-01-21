@@ -1,44 +1,22 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { GameState, GameMode, Pokemon, DrawingResult } from './types';
+import { GameState, Pokemon, DrawingResult } from './types';
 import { getRandomPokemon } from './services/pokemonService';
 import DrawingCanvas, { DrawingCanvasHandle } from './components/DrawingCanvas';
 
 const App: React.FC = () => {
   const [gameState, setGameState] = useState<GameState>('HOME');
-  const [gameMode, setGameMode] = useState<GameMode>('NORMAL');
   const [currentPokemon, setCurrentPokemon] = useState<Pokemon | null>(null);
   const [drawingTool, setDrawingTool] = useState<'pen' | 'eraser'>('pen');
-  const [timer, setTimer] = useState(0);
   const [lastResult, setLastResult] = useState<DrawingResult | null>(null);
   
   const canvasRef = useRef<DrawingCanvasHandle>(null);
-
-  // Timer logic
-  useEffect(() => {
-    let interval: any;
-    if (gameState === 'DRAWING' && gameMode === 'TIMED' && timer > 0) {
-      interval = setInterval(() => {
-        setTimer(prev => {
-          if (prev <= 1) {
-            handleFinish();
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [gameState, gameMode, timer]);
 
   const startGame = async () => {
     const pkmn = await getRandomPokemon();
     setCurrentPokemon(pkmn);
     setGameState('DRAWING');
     setDrawingTool('pen');
-    if (gameMode === 'TIMED') {
-      setTimer(60);
-    }
   };
 
   const handleFinish = async () => {
@@ -59,12 +37,6 @@ const App: React.FC = () => {
     setGameState('RESULT');
   };
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
-
   // --- Screens ---
 
   if (gameState === 'HOME') {
@@ -82,52 +54,18 @@ const App: React.FC = () => {
         </div>
 
         <div className="relative z-30 flex flex-col h-full flex-1 justify-between py-12">
-          <div className="flex flex-col items-center pt-4">
-            <div className="relative mb-6">
-              <div className="bg-white/30 absolute -inset-4 rounded-full blur-2xl"></div>
-              <div className="bg-white aspect-square rounded-full w-24 h-24 shadow-xl relative z-10 flex items-center justify-center border-4 border-poke-black">
-                <span className="material-symbols-outlined text-4xl text-poke-red" style={{ fontVariationSettings: "'FILL' 1" }}>draw</span>
-              </div>
-            </div>
-            <h1 className="text-white text-4xl font-black tracking-wider text-center drop-shadow-md">盲画宝可梦</h1>
-            <p className="text-white/90 text-sm font-medium mt-2 tracking-widest bg-black/10 px-4 py-1 rounded-full uppercase">非官方粉丝向小玩法</p>
+          <div className="flex flex-col items-center pt-10">
+            <h1 className="text-white text-4xl font-black tracking-wider text-center drop-shadow-md mt-4">
+              盲画宝可梦
+            </h1>
           </div>
 
-          <div className="flex flex-col items-center gap-6">
-            <div className="w-full max-w-xs bg-white/50 p-2 rounded-2xl flex gap-2 border border-gray-100">
-              <button 
-                onClick={() => setGameMode('NORMAL')}
-                className={`flex-1 flex h-12 items-center justify-center gap-x-2 rounded-xl transition-all active:scale-95 ${gameMode === 'NORMAL' ? 'bg-poke-red text-white shadow-md' : 'bg-gray-100 text-gray-600'}`}>
-                <span className="material-symbols-outlined text-xl">palette</span>
-                <span className="font-bold text-sm">普通模式</span>
-              </button>
-              <button 
-                onClick={() => setGameMode('TIMED')}
-                className={`flex-1 flex h-12 items-center justify-center gap-x-2 rounded-xl transition-all active:scale-95 ${gameMode === 'TIMED' ? 'bg-poke-red text-white shadow-md' : 'bg-gray-100 text-gray-600'}`}>
-                <span className="material-symbols-outlined text-xl">timer</span>
-                <span className="font-bold text-sm">计时模式</span>
-              </button>
-            </div>
-            
+          <div className="flex flex-col items-center gap-8">
             <button 
               onClick={startGame}
               className="w-full max-w-xs flex items-center justify-center rounded-2xl h-20 bg-poke-black text-white text-2xl font-black tracking-widest shadow-[0_8px_0_rgb(0,0,0,0.2)] hover:translate-y-[-2px] active:translate-y-[2px] active:shadow-none transition-all">
               开始游戏
             </button>
-
-            <div className="w-full max-w-sm glass-card rounded-3xl p-5 shadow-sm border border-gray-200">
-              <p className="text-poke-black text-sm font-bold mb-4 flex items-center justify-center gap-2">
-                <span className="material-symbols-outlined text-poke-red">info</span>
-                玩法说明
-              </p>
-              <div className="flex justify-between items-center px-2">
-                <Step icon="lightbulb" label="思考" />
-                <span className="material-symbols-outlined text-gray-300">chevron_right</span>
-                <Step icon="edit" label="绘制" />
-                <span className="material-symbols-outlined text-gray-300">chevron_right</span>
-                <Step icon="analytics" label="评分" />
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -145,11 +83,7 @@ const App: React.FC = () => {
             <span className="text-xs uppercase tracking-widest text-white/80 font-medium">请凭记忆画出：</span>
             <h2 className="text-2xl font-black leading-tight tracking-tight">{currentPokemon?.chineseName}</h2>
           </div>
-          <div className="w-14 flex items-center justify-center">
-            {gameMode === 'TIMED' && (
-              <span className="text-sm font-bold bg-black/20 px-2 py-1 rounded-lg">{formatTime(timer)}</span>
-            )}
-          </div>
+          <div className="w-14 flex items-center justify-center" />
         </header>
 
         <main className="flex-1 relative flex flex-col px-4 pt-6 pb-28">
