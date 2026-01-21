@@ -74,7 +74,7 @@ const App: React.FC = () => {
 
   if (gameState === 'DRAWING') {
     return (
-      <div className="bg-white min-h-screen w-full max-w-md mx-auto flex flex-col overflow-hidden">
+      <div className="bg-white h-dvh w-full max-w-md mx-auto flex flex-col overflow-hidden">
         <header className="flex items-center justify-between px-6 pt-12 pb-6 bg-poke-red text-white z-10 rounded-b-[2rem] shadow-lg">
           <button onClick={() => setGameState('HOME')} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/20 transition-colors">
             <span className="material-symbols-outlined">chevron_left</span>

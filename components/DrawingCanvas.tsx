@@ -25,14 +25,13 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle, DrawingCanvasProps>(({ too
       const rect = canvas.getBoundingClientRect();
       if (rect.width === 0 || rect.height === 0) return;
 
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
+      // 简化为 1:1 映射：画布像素尺寸 = CSS 尺寸，避免上下区域不一致
+      canvas.width = rect.width;
+      canvas.height = rect.height;
 
       const context = canvas.getContext('2d', { willReadFrequently: true });
       if (context) {
-        context.setTransform(1, 0, 0, 1, 0, 0); // 重置变换，避免重复 scale 叠加
-        context.scale(dpr, dpr);
+        context.setTransform(1, 0, 0, 1, 0, 0);
         context.lineCap = 'round';
         context.lineJoin = 'round';
         context.strokeStyle = 'black';
@@ -46,7 +45,7 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle, DrawingCanvasProps>(({ too
 
     setupCanvas();
 
-    // 监听尺寸变化，保证画布与容器同步
+    // 监听尺寸变化，保证画布与容器同步（应对 iOS 地址栏伸缩等情况）
     const resizeObserver = new ResizeObserver(() => {
       setupCanvas();
     });
