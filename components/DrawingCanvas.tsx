@@ -21,39 +21,25 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle, DrawingCanvasProps>(({ too
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const setupCanvas = () => {
-      const rect = canvas.getBoundingClientRect();
-      if (rect.width === 0 || rect.height === 0) return;
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
 
-      // 简化为 1:1 映射：画布像素尺寸 = CSS 尺寸，避免上下区域不一致
-      canvas.width = rect.width;
-      canvas.height = rect.height;
+    // 简化为 1:1 映射：画布像素尺寸 = CSS 尺寸，避免上下区域不一致
+    canvas.width = rect.width;
+    canvas.height = rect.height;
 
-      const context = canvas.getContext('2d', { willReadFrequently: true });
-      if (context) {
-        context.setTransform(1, 0, 0, 1, 0, 0);
-        context.lineCap = 'round';
-        context.lineJoin = 'round';
-        context.strokeStyle = 'black';
-        context.lineWidth = 4;
-        contextRef.current = context;
-        
-        // Initial save
-        saveHistory();
-      }
-    };
-
-    setupCanvas();
-
-    // 监听尺寸变化，保证画布与容器同步（应对 iOS 地址栏伸缩等情况）
-    const resizeObserver = new ResizeObserver(() => {
-      setupCanvas();
-    });
-    resizeObserver.observe(canvas);
-
-    return () => {
-      resizeObserver.disconnect();
-    };
+    const context = canvas.getContext('2d', { willReadFrequently: true });
+    if (context) {
+      context.setTransform(1, 0, 0, 1, 0, 0);
+      context.lineCap = 'round';
+      context.lineJoin = 'round';
+      context.strokeStyle = 'black';
+      context.lineWidth = 4;
+      contextRef.current = context;
+      
+      // Initial save
+      saveHistory();
+    }
   }, []);
 
   useEffect(() => {

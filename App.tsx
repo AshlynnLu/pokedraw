@@ -12,16 +12,25 @@ const App: React.FC = () => {
   
   const canvasRef = useRef<DrawingCanvasHandle>(null);
 
-  // 控制页面滚动：在首页和绘画页禁止滚动，其它页面恢复
+  // 控制页面滚动：在首页和绘画页禁止滚动，其它页面恢复（包含 iOS Safari）
   useEffect(() => {
+    const preventScroll = (e: TouchEvent) => {
+      // 仅在 HOME / DRAWING 阶段阻止默认滚动行为
+      if (gameState === 'HOME' || gameState === 'DRAWING') {
+        e.preventDefault();
+      }
+    };
+
     if (gameState === 'HOME' || gameState === 'DRAWING') {
       document.body.style.overflowY = 'hidden';
+      window.addEventListener('touchmove', preventScroll, { passive: false });
     } else {
       document.body.style.overflowY = '';
     }
 
     return () => {
       document.body.style.overflowY = '';
+      window.removeEventListener('touchmove', preventScroll);
     };
   }, [gameState]);
 
