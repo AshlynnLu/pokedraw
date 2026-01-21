@@ -12,6 +12,19 @@ const App: React.FC = () => {
   
   const canvasRef = useRef<DrawingCanvasHandle>(null);
 
+  // 控制页面滚动：在首页和绘画页禁止滚动，其它页面恢复
+  useEffect(() => {
+    if (gameState === 'HOME' || gameState === 'DRAWING') {
+      document.body.style.overflowY = 'hidden';
+    } else {
+      document.body.style.overflowY = '';
+    }
+
+    return () => {
+      document.body.style.overflowY = '';
+    };
+  }, [gameState]);
+
   const startGame = async () => {
     const pkmn = await getRandomPokemon();
     setCurrentPokemon(pkmn);
