@@ -4,9 +4,10 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
+    // 如果部署到自定义域名（如 pkm.soranx.com），使用根路径；GitHub Pages 子路径用 /pokedraw/
+    const base = env.VITE_BASE_PATH || '/pokedraw/';
     return {
-      // GitHub Pages 子路径部署用，比如 https://用户名.github.io/pokedraw
-      base: '/pokedraw/',
+      base,
       server: {
         port: 3000,
         host: '0.0.0.0',

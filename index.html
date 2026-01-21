@@ -5,61 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>盲画宝可梦</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "poke-red": "#FF0000",
-                        "poke-white": "#FFFFFF",
-                        "poke-black": "#333333",
-                        "primary": "#FF0000",
-                    },
-                    fontFamily: {
-                        "display": ["Spline Sans", "PingFang SC", "Microsoft YaHei", "sans-serif"]
-                    },
-                },
-            },
-        }
-    </script>
-    <style type="text/tailwindcss">
-        body {
-            font-family: 'Spline Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            @apply bg-poke-white text-poke-black select-none;
-        }
-        #root {
-            width: 100vw;
-            min-height: 100vh;
-        }
-        .pokeball-bg {
-            background: linear-gradient(to bottom, #FF0000 50%, #FFFFFF 50%);
-        }
-        .pokeball-line {
-            height: 12px;
-            /* 固定在视口中间，左右撑满，避免两侧缺口 */
-            @apply bg-poke-black fixed left-0 right-0 top-1/2 -translate-y-1/2 z-10;
-        }
-        .pokeball-center {
-            @apply w-20 h-20 bg-poke-white border-[12px] border-poke-black rounded-full fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex items-center justify-center;
-        }
-        .pokeball-inner-circle {
-            @apply w-9 h-9 border-2 border-poke-black rounded-full;
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(8px);
-        }
-        .canvas-container {
-            touch-action: none;
-        }
-        canvas {
-            touch-action: none;
-        }
-    </style>
 <script type="importmap">
 {
   "imports": {
@@ -70,7 +17,6 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
 </head>
 <body class="overflow-x-hidden">
     <div id="root"></div>

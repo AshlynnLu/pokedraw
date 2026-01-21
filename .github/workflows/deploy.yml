@@ -31,6 +31,8 @@ jobs:
       - name: Build
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # 如果部署到自定义域名，设置 VITE_BASE_PATH=/；GitHub Pages 子路径用 /pokedraw/
+          VITE_BASE_PATH: ${{ vars.VITE_BASE_PATH || '/pokedraw/' }}
         run: npm run build
 
       - name: Setup Pages
