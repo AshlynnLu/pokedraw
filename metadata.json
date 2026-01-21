@@ -1,7 +1,4 @@
 {
-  "name": "盲画宝可梦 (Blind Draw Pokemon)",
-  "description": "一个考验记忆力与想象力的宝可梦手绘挑战小游戏。根据名称盲画宝可梦，并由 AI 进行趣味评分。",
-  "requestFramePermissions": [
-    "camera"
-  ]
+  "name": "盲画宝可梦",
+  "description": " "
 }
