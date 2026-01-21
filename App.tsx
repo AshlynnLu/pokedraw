@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { GameState, GameMode, Pokemon, DrawingResult } from './types';
 import { getRandomPokemon } from './services/pokemonService';
-import { getAIScore } from './services/geminiService';
 import DrawingCanvas, { DrawingCanvasHandle } from './components/DrawingCanvas';
 
 const App: React.FC = () => {
@@ -11,7 +10,6 @@ const App: React.FC = () => {
   const [currentPokemon, setCurrentPokemon] = useState<Pokemon | null>(null);
   const [drawingTool, setDrawingTool] = useState<'pen' | 'eraser'>('pen');
   const [timer, setTimer] = useState(0);
-  const [isScoring, setIsScoring] = useState(false);
   const [lastResult, setLastResult] = useState<DrawingResult | null>(null);
   
   const canvasRef = useRef<DrawingCanvasHandle>(null);
@@ -46,29 +44,19 @@ const App: React.FC = () => {
   const handleFinish = async () => {
     if (!canvasRef.current || !currentPokemon) return;
     
-    setIsScoring(true);
     const userDrawing = canvasRef.current.getDataUrl();
     
-    try {
-      const aiResult = await getAIScore(currentPokemon.chineseName, currentPokemon.imageUrl, userDrawing);
-      
-      const result: DrawingResult = {
-        id: Date.now().toString(),
-        pokemon: currentPokemon,
-        userDrawing,
-        score: aiResult.score,
-        comment: aiResult.comment,
-        timestamp: Date.now()
-      };
-      
-      setLastResult(result);
-      setGameState('RESULT');
-    } catch (error) {
-      console.error("Scoring failed:", error);
-      alert("AI 评分系统似乎遇到了点麻烦，请重试！");
-    } finally {
-      setIsScoring(false);
-    }
+    const placeholderResult: DrawingResult = {
+      id: Date.now().toString(),
+      pokemon: currentPokemon,
+      userDrawing,
+      score: 0,
+      comment: "",
+      timestamp: Date.now()
+    };
+
+    setLastResult(placeholderResult);
+    setGameState('RESULT');
   };
 
   const formatTime = (seconds: number) => {
@@ -102,7 +90,7 @@ const App: React.FC = () => {
               </div>
             </div>
             <h1 className="text-white text-4xl font-black tracking-wider text-center drop-shadow-md">盲画宝可梦</h1>
-            <p className="text-white/90 text-sm font-medium mt-2 tracking-widest bg-black/10 px-4 py-1 rounded-full uppercase">AI 相似度评分系统</p>
+            <p className="text-white/90 text-sm font-medium mt-2 tracking-widest bg-black/10 px-4 py-1 rounded-full uppercase">非官方粉丝向小玩法</p>
           </div>
 
           <div className="flex flex-col items-center gap-6">
@@ -181,11 +169,10 @@ const App: React.FC = () => {
               <ToolButton active={false} icon="delete" label="清空" onClick={() => canvasRef.current?.clear()} danger />
             </div>
             <button 
-              disabled={isScoring}
               onClick={handleFinish}
               className="pointer-events-auto h-20 w-20 flex flex-col items-center justify-center bg-poke-red text-white rounded-2xl shadow-lg shadow-red-200 hover:scale-105 active:scale-95 transition-all disabled:opacity-50">
-              <span className="material-symbols-outlined text-3xl">{isScoring ? 'sync' : 'check_circle'}</span>
-              <span className="font-bold text-sm tracking-widest mt-1">{isScoring ? '评分中' : '完成'}</span>
+              <span className="material-symbols-outlined text-3xl">check_circle</span>
+              <span className="font-bold text-sm tracking-widest mt-1">完成</span>
             </button>
           </div>
         </div>
@@ -207,7 +194,7 @@ const App: React.FC = () => {
         </div>
         
         <main className="w-full flex-1 px-4 -mt-16 z-10 space-y-4 pb-12">
-          <div className="relative flex flex-col gap-2">
+          <div className="relative flex flex-col gap-4">
             {/* Official Art */}
             <div className="overflow-hidden rounded-2xl bg-white shadow-xl border-4 border-white">
               <div className="relative aspect-[4/3] w-full bg-center bg-no-repeat bg-contain bg-gray-50 flex items-center justify-center">
@@ -216,15 +203,6 @@ const App: React.FC = () => {
               </div>
               <div className="p-3 bg-white">
                 <h3 className="text-poke-black font-bold text-lg">{lastResult.pokemon.chineseName}</h3>
-              </div>
-            </div>
-
-            {/* AI Badge */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-              <div className="w-24 h-24 rounded-full bg-white shadow-[0_0_20px_rgba(0,0,0,0.15),0_0_0_8px_rgba(255,255,255,1)] border-[6px] border-poke-black flex flex-col items-center justify-center text-center">
-                <span className="text-[10px] font-bold text-gray-500 leading-none">相似度</span>
-                <span className="text-2xl font-black text-poke-black leading-tight">{lastResult.score}%</span>
-                <div className="w-6 h-1 bg-poke-red rounded-full mt-1"></div>
               </div>
             </div>
 
@@ -240,8 +218,8 @@ const App: React.FC = () => {
             </div>
           </div>
 
-          <div className="py-6 px-4 text-center">
-            <p className="text-gray-500 font-medium italic">"{lastResult.comment}"</p>
+          <div className="py-4 px-4 text-center">
+            <p className="text-gray-500 font-medium">这一轮完成啦，看看你和官方的差异有多“有创意”吧！</p>
           </div>
 
           <div className="flex flex-col gap-3">
