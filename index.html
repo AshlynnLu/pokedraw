@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>盲画宝可梦 - Blind Draw Pokemon</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "poke-red": "#FF0000",
+                        "poke-white": "#FFFFFF",
+                        "poke-black": "#333333",
+                        "primary": "#FF0000",
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "PingFang SC", "Microsoft YaHei", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        body {
+            font-family: 'Spline Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            @apply bg-poke-white text-poke-black select-none flex justify-center;
+        }
+        #root {
+            width: 100vw;
+            height: 100vh;
+            max-width: 480px; /* 约等于常见移动端 16:9 视口宽度 */
+        }
+        .pokeball-bg {
+            background: linear-gradient(to bottom, #FF0000 50%, #FFFFFF 50%);
+        }
+        .pokeball-line {
+            height: 12px;
+            @apply bg-poke-black w-full absolute top-1/2 -translate-y-1/2 z-10;
+        }
+        .pokeball-center {
+            @apply w-20 h-20 bg-poke-white border-[12px] border-poke-black rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex items-center justify-center;
+        }
+        .pokeball-inner-circle {
+            @apply w-9 h-9 border-2 border-poke-black rounded-full;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+        }
+        .canvas-container {
+            touch-action: none;
+        }
+        canvas {
+            touch-action: none;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.38.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="overflow-x-hidden">
+    <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
