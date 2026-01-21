@@ -9,6 +9,7 @@ const App: React.FC = () => {
   const [currentPokemon, setCurrentPokemon] = useState<Pokemon | null>(null);
   const [drawingTool, setDrawingTool] = useState<'pen' | 'eraser'>('pen');
   const [lastResult, setLastResult] = useState<DrawingResult | null>(null);
+  const [isStarting, setIsStarting] = useState(false);
   
   const canvasRef = useRef<DrawingCanvasHandle>(null);
 
@@ -35,10 +36,18 @@ const App: React.FC = () => {
   }, [gameState]);
 
   const startGame = async () => {
-    const pkmn = await getRandomPokemon();
-    setCurrentPokemon(pkmn);
-    setGameState('DRAWING');
-    setDrawingTool('pen');
+    // 防止重复点击
+    if (isStarting) return;
+    
+    setIsStarting(true);
+    try {
+      const pkmn = await getRandomPokemon();
+      setCurrentPokemon(pkmn);
+      setGameState('DRAWING');
+      setDrawingTool('pen');
+    } finally {
+      setIsStarting(false);
+    }
   };
 
   const handleFinish = async () => {
@@ -63,24 +72,25 @@ const App: React.FC = () => {
 
   if (gameState === 'HOME') {
     return (
-      <div className="relative flex h-dvh w-full max-w-md mx-auto flex-col pokeball-bg overflow-hidden p-6">
+      <div className="relative flex h-dvh w-full flex-col pokeball-bg overflow-hidden">
         <div className="pokeball-line"></div>
         <div className="pokeball-center">
           <div className="pokeball-inner-circle"></div>
         </div>
 
-        <div className="relative z-30 flex flex-col h-full flex-1 justify-between py-12">
+        <div className="relative z-30 flex flex-col h-full flex-1 justify-between py-12 px-6">
           <div className="flex flex-col items-center pt-10">
             <h1 className="text-white text-4xl font-black tracking-wider text-center drop-shadow-md mt-4">
               盲画宝可梦
             </h1>
           </div>
 
-          <div className="flex flex-col items-center gap-8">
+          <div className="flex flex-col items-center gap-8 max-w-md mx-auto w-full">
             <button 
               onClick={startGame}
-              className="w-full max-w-xs flex items-center justify-center rounded-2xl h-20 bg-poke-black text-white text-2xl font-black tracking-widest shadow-[0_8px_0_rgb(0,0,0,0.2)] hover:translate-y-[-2px] active:translate-y-[2px] active:shadow-none transition-all">
-              开始游戏
+              disabled={isStarting}
+              className="w-full max-w-xs flex items-center justify-center rounded-2xl h-20 bg-poke-black text-white text-2xl font-black tracking-widest shadow-[0_8px_0_rgb(0,0,0,0.2)] hover:translate-y-[-2px] active:translate-y-[2px] active:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+              {isStarting ? '加载中...' : '开始游戏'}
             </button>
           </div>
         </div>
