@@ -68,12 +68,6 @@ const App: React.FC = () => {
         <div className="pokeball-center">
           <div className="pokeball-inner-circle"></div>
         </div>
-        
-        <div className="relative z-30 flex items-center justify-end">
-          <div className="flex size-12 items-center justify-center bg-black/20 rounded-full backdrop-blur-md cursor-pointer">
-            <span className="material-symbols-outlined text-white">emoji_events</span>
-          </div>
-        </div>
 
         <div className="relative z-30 flex flex-col h-full flex-1 justify-between py-12">
           <div className="flex flex-col items-center pt-10">
