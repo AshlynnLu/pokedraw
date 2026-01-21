@@ -41,7 +41,7 @@ const App: React.FC = () => {
 
   if (gameState === 'HOME') {
     return (
-      <div className="relative flex min-h-screen w-full max-w-md mx-auto flex-col pokeball-bg overflow-hidden p-6">
+      <div className="relative flex h-dvh w-full max-w-md mx-auto flex-col pokeball-bg overflow-hidden p-6">
         <div className="pokeball-line"></div>
         <div className="pokeball-center">
           <div className="pokeball-inner-circle"></div>
@@ -152,9 +152,7 @@ const App: React.FC = () => {
             </div>
           </div>
 
-          <div className="py-4 px-4 text-center">
-            <p className="text-gray-500 font-medium">这一轮完成啦，看看你和官方的差异有多“有创意”吧！</p>
-          </div>
+
 
           <div className="flex flex-col gap-3">
             <button 

@@ -21,24 +21,40 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle, DrawingCanvasProps>(({ too
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // 使用设备像素比，确保画布内部坐标系与视觉尺寸一致（避免只能在上半部分绘制的问题）
-    const rect = canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
+    const setupCanvas = () => {
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
 
-    const context = canvas.getContext('2d', { willReadFrequently: true });
-    if (context) {
-      context.scale(dpr, dpr);
-      context.lineCap = 'round';
-      context.lineJoin = 'round';
-      context.strokeStyle = 'black';
-      context.lineWidth = 4;
-      contextRef.current = context;
-      
-      // Initial save
-      saveHistory();
-    }
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+
+      const context = canvas.getContext('2d', { willReadFrequently: true });
+      if (context) {
+        context.setTransform(1, 0, 0, 1, 0, 0); // 重置变换，避免重复 scale 叠加
+        context.scale(dpr, dpr);
+        context.lineCap = 'round';
+        context.lineJoin = 'round';
+        context.strokeStyle = 'black';
+        context.lineWidth = 4;
+        contextRef.current = context;
+        
+        // Initial save
+        saveHistory();
+      }
+    };
+
+    setupCanvas();
+
+    // 监听尺寸变化，保证画布与容器同步
+    const resizeObserver = new ResizeObserver(() => {
+      setupCanvas();
+    });
+    resizeObserver.observe(canvas);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
   }, []);
 
   useEffect(() => {

@@ -29,21 +29,22 @@
     <style type="text/tailwindcss">
         body {
             font-family: 'Spline Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            @apply bg-poke-white text-poke-black select-none;
+            @apply bg-poke-white text-poke-black select-none overflow-hidden;
         }
         #root {
             width: 100vw;
-            min-height: 100vh;
+            height: 100vh;
         }
         .pokeball-bg {
             background: linear-gradient(to bottom, #FF0000 50%, #FFFFFF 50%);
         }
         .pokeball-line {
             height: 12px;
-            @apply bg-poke-black w-full absolute top-1/2 -translate-y-1/2 z-10;
+            /* 固定在视口中间，左右撑满，避免两侧缺口 */
+            @apply bg-poke-black fixed left-0 right-0 top-1/2 -translate-y-1/2 z-10;
         }
         .pokeball-center {
-            @apply w-20 h-20 bg-poke-white border-[12px] border-poke-black rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex items-center justify-center;
+            @apply w-20 h-20 bg-poke-white border-[12px] border-poke-black rounded-full fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex items-center justify-center;
         }
         .pokeball-inner-circle {
             @apply w-9 h-9 border-2 border-poke-black rounded-full;
