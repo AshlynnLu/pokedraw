@@ -1,7 +1,8 @@
 
 import { Pokemon } from '../types';
 
-// 第一、二世代宝可梦的中文名映射（没在表里的就显示英文名）
+// 第一、二、三世代宝可梦的中文名映射（没在表里的就显示英文名）
+// 作为“白名单覆盖”，其余世代优先从 PokeAPI 的中文本地化名称里自动获取
 const CHINESE_NAME_MAP: Record<string, string> = {
   // Gen 1
   "bulbasaur": "妙蛙种子",
@@ -256,23 +257,190 @@ const CHINESE_NAME_MAP: Record<string, string> = {
   "tyranitar": "班基拉斯",
   "lugia": "洛奇亚",
   "ho-oh": "凤王",
-  "celebi": "时拉比"
+  "celebi": "时拉比",
+
+  // Gen 3（仅补你列出的 #252–#386）
+  "treecko": "木守宫",
+  "grovyle": "森林蜥蜴",
+  "sceptile": "蜥蜴王",
+  "torchic": "火稚鸡",
+  "combusken": "力壮鸡",
+  "blaziken": "火焰鸡",
+  "mudkip": "水跃鱼",
+  "marshtomp": "沼跃鱼",
+  "swampert": "巨沼怪",
+  "poochyena": "土狼犬",
+  "mightyena": "大狼犬",
+  "zigzagoon": "蛇纹熊",
+  "linoone": "直冲熊",
+  "wurmple": "刺尾虫",
+  "silcoon": "甲壳茧",
+  "beautifly": "狩猎凤蝶",
+  "cascoon": "盾甲茧",
+  "dustox": "毒粉蛾",
+  "lotad": "莲叶童子",
+  "lombre": "莲帽小童",
+  "ludicolo": "乐天河童",
+  "seedot": "橡实果",
+  "nuzleaf": "长鼻叶",
+  "shiftry": "狡猾天狗",
+  "taillow": "傲骨燕",
+  "swellow": "大王燕",
+  "wingull": "长翅鸥",
+  "pelipper": "大嘴鸥",
+  "ralts": "拉鲁拉丝",
+  "kirlia": "奇鲁莉安",
+  "gardevoir": "沙奈朵",
+  "surskit": "溜溜糖球",
+  "masquerain": "雨翅蛾",
+  "shroomish": "蘑蘑菇",
+  "breloom": "斗笠菇",
+  "slakoth": "懒人獭",
+  "vigoroth": "过动猿",
+  "slaking": "请假王",
+  "nincada": "土居忍士",
+  "ninjask": "铁面忍者",
+  "shedinja": "脱壳忍者",
+  "whismur": "咕妞妞",
+  "loudred": "吼爆弹",
+  "exploud": "爆音怪",
+  "makuhita": "幕下力士",
+  "hariyama": "铁掌力士",
+  "azurill": "露力丽",
+  "nosepass": "朝北鼻",
+  "skitty": "向尾喵",
+  "delcatty": "优雅猫",
+  "sableye": "勾魂眼",
+  "mawile": "大嘴娃",
+  "aron": "可可多拉",
+  "lairon": "可多拉",
+  "aggron": "波士可多拉",
+  "meditite": "玛沙那",
+  "medicham": "恰雷姆",
+  "electrike": "落雷兽",
+  "manectric": "雷电兽",
+  "plusle": "正电拍拍",
+  "minun": "负电拍拍",
+  "volbeat": "电萤虫",
+  "illumise": "甜甜萤",
+  "roselia": "毒蔷薇",
+  "gulpin": "溶食兽",
+  "swalot": "吞食兽",
+  "carvanha": "利牙鱼",
+  "sharpedo": "巨牙鲨",
+  "wailmer": "吼吼鲸",
+  "wailord": "吼鲸王",
+  "numel": "呆火驼",
+  "camerupt": "喷火驼",
+  "torkoal": "煤炭龟",
+  "spoink": "跳跳猪",
+  "grumpig": "噗噗猪",
+  "spinda": "晃晃斑",
+  "trapinch": "大颚蚁",
+  "vibrava": "超音波幼虫",
+  "flygon": "沙漠蜻蜓",
+  "cacnea": "刺球仙人掌",
+  "cacturne": "梦歌仙人掌",
+  "swablu": "青绵鸟",
+  "altaria": "七夕青鸟",
+  "zangoose": "猫鼬斩",
+  "seviper": "饭匙蛇",
+  "lunatone": "月石",
+  "solrock": "太阳岩",
+  "barboach": "泥泥鳅",
+  "whiscash": "鲶鱼王",
+  "corphish": "龙虾小兵",
+  "crawdaunt": "铁螯龙虾",
+  "baltoy": "天秤偶",
+  "claydol": "念力土偶",
+  "lileep": "触手百合",
+  "cradily": "摇篮百合",
+  "anorith": "太古羽虫",
+  "armaldo": "太古盔甲",
+  "feebas": "丑丑鱼",
+  "milotic": "美纳斯",
+  "castform": "飘浮泡泡",
+  "kecleon": "变隐龙",
+  "shuppet": "怨影娃娃",
+  "banette": "诅咒娃娃",
+  "duskull": "夜巡灵",
+  "dusclops": "彷徨夜灵",
+  "tropius": "热带龙",
+  "chimecho": "风铃铃",
+  "absol": "阿勃梭鲁",
+  "wynaut": "小果然",
+  "snorunt": "雪童子",
+  "glalie": "冰鬼护",
+  "spheal": "海豹球",
+  "sealeo": "海魔狮",
+  "walrein": "帝牙海狮",
+  "clamperl": "珍珠贝",
+  "huntail": "猎斑鱼",
+  "gorebyss": "樱花鱼",
+  "relicanth": "古空棘鱼",
+  "luvdisc": "爱心鱼",
+  "bagon": "宝贝龙",
+  "shelgon": "甲壳龙",
+  "salamence": "暴飞龙",
+  "beldum": "铁哑铃",
+  "metang": "金属怪",
+  "metagross": "巨金怪",
+  "regirock": "雷吉洛克",
+  "regice": "雷吉艾斯",
+  "registeel": "雷吉斯奇鲁",
+  "latias": "拉帝亚斯",
+  "latios": "拉帝欧斯",
+  "kyogre": "盖欧卡",
+  "groudon": "固拉多",
+  "rayquaza": "烈空坐",
+  "jirachi": "基拉祈",
+  "deoxys": "代欧奇希斯"
 };
 
+// 当前 PokeAPI 已收录到第九世代，图鉴 ID 约到 1010
+const MAX_DEX_ID = 1010;
+
 export const getRandomPokemon = async (): Promise<Pokemon> => {
-  // 1 ~ 251（第一、二世代）之间随机一个图鉴编号
-  const randomId = Math.floor(Math.random() * 251) + 1;
+  // 1 ~ MAX_DEX_ID 之间随机一个图鉴编号
+  const randomId = Math.floor(Math.random() * MAX_DEX_ID) + 1;
   try {
+    // 1. 基础信息（英文名、图片等）
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
     const data = await res.json();
     
-    const englishName = data.name;
-    const chineseName = CHINESE_NAME_MAP[englishName] || englishName;
+    const englishName: string = data.name;
+
+    // 2. 先尝试用手动映射表里的中文名
+    let chineseName: string | undefined = CHINESE_NAME_MAP[englishName];
+
+    // 3. 如果没有手动映射，则从 species 接口里读取官方中文名
+    if (!chineseName) {
+      try {
+        const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${data.id}`);
+        const speciesData = await speciesRes.json();
+        const zhEntry =
+          speciesData.names?.find((n: any) => n.language?.name === 'zh-Hans') ||
+          speciesData.names?.find((n: any) => n.language?.name === 'zh-Hant') ||
+          speciesData.names?.find((n: any) => n.language?.name === 'zh-TW') ||
+          speciesData.names?.find((n: any) => n.language?.name === 'zh-CN');
+
+        if (zhEntry && typeof zhEntry.name === 'string') {
+          chineseName = zhEntry.name;
+        }
+      } catch (e) {
+        // 如果物种信息获取失败，就退回英文名 / 手动表
+        console.warn('Failed to fetch pokemon species info for Chinese name:', e);
+      }
+    }
+
+    if (!chineseName) {
+      chineseName = englishName;
+    }
     
     return {
       id: data.id,
       name: englishName,
-      chineseName: chineseName,
+      chineseName,
       imageUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${data.id}.png`
     };
   } catch (error) {

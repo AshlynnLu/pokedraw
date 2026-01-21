@@ -169,7 +169,7 @@ const App: React.FC = () => {
                 <div className="absolute top-3 left-3 bg-poke-black text-white text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">你的作品</div>
               </div>
               <div className="p-3 bg-white">
-                <h3 className="text-poke-black font-bold text-lg">灵魂画手作品</h3>
+                <h3 className="text-poke-black font-bold text-lg">你的作品</h3>
               </div>
             </div>
           </div>
